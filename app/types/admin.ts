@@ -27,8 +27,3 @@ export interface UpdateAdminRequest {
     role?: Role;
     status?: AccountStatus;
 }
-
-export interface LoginRequest {
-    email: string;
-    password: string;
-}

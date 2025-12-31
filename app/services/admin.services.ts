@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
 import prisma from '../lib/prisma';
-import { AdminResponse, CreateAdminRequest, UpdateAdminRequest, LoginRequest } from '../types/admin';
+import { AdminResponse, CreateAdminRequest, UpdateAdminRequest } from '../types/admin';
 import { PaginationParams, PaginatedResponse } from '../types';
 
 export async function createAdmin(data: CreateAdminRequest): Promise<AdminResponse> {
@@ -68,6 +68,16 @@ export async function getAdminById(id:string): Promise<AdminResponse | null> {
 
   return toAdminResponse(admin);
 
+}
+
+export async function getAdminByEmail(email: string): Promise<AdminResponse | null> {
+  const admin = await prisma.admin.findUnique({
+    where: { email },
+  });
+
+  if (!admin) return null;
+
+  return toAdminResponse(admin);
 }
 
 export async function updateAdmin(id: string, data: UpdateAdminRequest): Promise<AdminResponse> {
