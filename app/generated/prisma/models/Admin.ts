@@ -34,7 +34,6 @@ export type AdminMinAggregateOutputType = {
   status: $Enums.AccountStatus | null
   createdAt: Date | null
   updatedAt: Date | null
-  lastLoginAt: Date | null
 }
 
 export type AdminMaxAggregateOutputType = {
@@ -47,7 +46,6 @@ export type AdminMaxAggregateOutputType = {
   status: $Enums.AccountStatus | null
   createdAt: Date | null
   updatedAt: Date | null
-  lastLoginAt: Date | null
 }
 
 export type AdminCountAggregateOutputType = {
@@ -60,7 +58,6 @@ export type AdminCountAggregateOutputType = {
   status: number
   createdAt: number
   updatedAt: number
-  lastLoginAt: number
   _all: number
 }
 
@@ -75,7 +72,6 @@ export type AdminMinAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
-  lastLoginAt?: true
 }
 
 export type AdminMaxAggregateInputType = {
@@ -88,7 +84,6 @@ export type AdminMaxAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
-  lastLoginAt?: true
 }
 
 export type AdminCountAggregateInputType = {
@@ -101,7 +96,6 @@ export type AdminCountAggregateInputType = {
   status?: true
   createdAt?: true
   updatedAt?: true
-  lastLoginAt?: true
   _all?: true
 }
 
@@ -187,7 +181,6 @@ export type AdminGroupByOutputType = {
   status: $Enums.AccountStatus
   createdAt: Date
   updatedAt: Date
-  lastLoginAt: Date | null
   _count: AdminCountAggregateOutputType | null
   _min: AdminMinAggregateOutputType | null
   _max: AdminMaxAggregateOutputType | null
@@ -221,7 +214,6 @@ export type AdminWhereInput = {
   status?: Prisma.EnumAccountStatusFilter<"Admin"> | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
-  lastLoginAt?: Prisma.DateTimeNullableFilter<"Admin"> | Date | string | null
   sessions?: Prisma.SessionListRelationFilter
 }
 
@@ -235,7 +227,6 @@ export type AdminOrderByWithRelationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   sessions?: Prisma.SessionOrderByRelationAggregateInput
 }
 
@@ -252,7 +243,6 @@ export type AdminWhereUniqueInput = Prisma.AtLeast<{
   status?: Prisma.EnumAccountStatusFilter<"Admin"> | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
-  lastLoginAt?: Prisma.DateTimeNullableFilter<"Admin"> | Date | string | null
   sessions?: Prisma.SessionListRelationFilter
 }, "id" | "email">
 
@@ -266,7 +256,6 @@ export type AdminOrderByWithAggregationInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AdminCountOrderByAggregateInput
   _max?: Prisma.AdminMaxOrderByAggregateInput
   _min?: Prisma.AdminMinOrderByAggregateInput
@@ -285,7 +274,6 @@ export type AdminScalarWhereWithAggregatesInput = {
   status?: Prisma.EnumAccountStatusWithAggregatesFilter<"Admin"> | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
-  lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Admin"> | Date | string | null
 }
 
 export type AdminCreateInput = {
@@ -298,7 +286,6 @@ export type AdminCreateInput = {
   status?: $Enums.AccountStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  lastLoginAt?: Date | string | null
   sessions?: Prisma.SessionCreateNestedManyWithoutAdminInput
 }
 
@@ -312,7 +299,6 @@ export type AdminUncheckedCreateInput = {
   status?: $Enums.AccountStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  lastLoginAt?: Date | string | null
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutAdminInput
 }
 
@@ -326,7 +312,6 @@ export type AdminUpdateInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUpdateManyWithoutAdminNestedInput
 }
 
@@ -340,7 +325,6 @@ export type AdminUncheckedUpdateInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutAdminNestedInput
 }
 
@@ -354,7 +338,6 @@ export type AdminCreateManyInput = {
   status?: $Enums.AccountStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  lastLoginAt?: Date | string | null
 }
 
 export type AdminUpdateManyMutationInput = {
@@ -367,7 +350,6 @@ export type AdminUpdateManyMutationInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AdminUncheckedUpdateManyInput = {
@@ -380,7 +362,6 @@ export type AdminUncheckedUpdateManyInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AdminCountOrderByAggregateInput = {
@@ -393,7 +374,6 @@ export type AdminCountOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  lastLoginAt?: Prisma.SortOrder
 }
 
 export type AdminMaxOrderByAggregateInput = {
@@ -406,7 +386,6 @@ export type AdminMaxOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  lastLoginAt?: Prisma.SortOrder
 }
 
 export type AdminMinOrderByAggregateInput = {
@@ -419,7 +398,6 @@ export type AdminMinOrderByAggregateInput = {
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  lastLoginAt?: Prisma.SortOrder
 }
 
 export type AdminScalarRelationFilter = {
@@ -447,10 +425,6 @@ export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
 }
 
-export type NullableDateTimeFieldUpdateOperationsInput = {
-  set?: Date | string | null
-}
-
 export type AdminCreateNestedOneWithoutSessionsInput = {
   create?: Prisma.XOR<Prisma.AdminCreateWithoutSessionsInput, Prisma.AdminUncheckedCreateWithoutSessionsInput>
   connectOrCreate?: Prisma.AdminCreateOrConnectWithoutSessionsInput
@@ -475,7 +449,6 @@ export type AdminCreateWithoutSessionsInput = {
   status?: $Enums.AccountStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  lastLoginAt?: Date | string | null
 }
 
 export type AdminUncheckedCreateWithoutSessionsInput = {
@@ -488,7 +461,6 @@ export type AdminUncheckedCreateWithoutSessionsInput = {
   status?: $Enums.AccountStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  lastLoginAt?: Date | string | null
 }
 
 export type AdminCreateOrConnectWithoutSessionsInput = {
@@ -517,7 +489,6 @@ export type AdminUpdateWithoutSessionsInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type AdminUncheckedUpdateWithoutSessionsInput = {
@@ -530,7 +501,6 @@ export type AdminUncheckedUpdateWithoutSessionsInput = {
   status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -574,7 +544,6 @@ export type AdminSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  lastLoginAt?: boolean
   sessions?: boolean | Prisma.Admin$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["admin"]>
@@ -589,7 +558,6 @@ export type AdminSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  lastLoginAt?: boolean
 }, ExtArgs["result"]["admin"]>
 
 export type AdminSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -602,7 +570,6 @@ export type AdminSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  lastLoginAt?: boolean
 }, ExtArgs["result"]["admin"]>
 
 export type AdminSelectScalar = {
@@ -615,10 +582,9 @@ export type AdminSelectScalar = {
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  lastLoginAt?: boolean
 }
 
-export type AdminOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "name" | "avatar" | "role" | "status" | "createdAt" | "updatedAt" | "lastLoginAt", ExtArgs["result"]["admin"]>
+export type AdminOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "name" | "avatar" | "role" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["admin"]>
 export type AdminInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   sessions?: boolean | Prisma.Admin$sessionsArgs<ExtArgs>
   _count?: boolean | Prisma.AdminCountOutputTypeDefaultArgs<ExtArgs>
@@ -641,7 +607,6 @@ export type $AdminPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     status: $Enums.AccountStatus
     createdAt: Date
     updatedAt: Date
-    lastLoginAt: Date | null
   }, ExtArgs["result"]["admin"]>
   composites: {}
 }
@@ -1075,7 +1040,6 @@ export interface AdminFieldRefs {
   readonly status: Prisma.FieldRef<"Admin", 'AccountStatus'>
   readonly createdAt: Prisma.FieldRef<"Admin", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Admin", 'DateTime'>
-  readonly lastLoginAt: Prisma.FieldRef<"Admin", 'DateTime'>
 }
     
 
