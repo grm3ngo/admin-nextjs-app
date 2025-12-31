@@ -18,7 +18,6 @@ export async function getStats(): Promise<DashboardStats> {
     };
 }
 
-// Group by role (cho pie chart)
 export async function getAdminsByRole(): Promise<ChartDataPoint[]> {
   const result = await prisma.admin.groupBy({
     by: ['role'],

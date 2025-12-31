@@ -13,3 +13,8 @@ export interface AuthResponse {
     token: string;
     expiresAt: Date;
 }
+
+export interface LoginRequest {
+    email: string;
+    password: string;
+}
