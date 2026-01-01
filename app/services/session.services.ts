@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import prisma from '../lib/prisma';
-import { SessionResponse } from '../types';
+import { Session } from '../types';
 
-export async function createSession(adminId: string): Promise<SessionResponse> {
+export async function createSession(adminId: string): Promise<Session> {
     const token = crypto.randomUUID();
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 ngay
 
@@ -14,17 +14,17 @@ export async function createSession(adminId: string): Promise<SessionResponse> {
         },
     });
 
-    return toSessionResponse(session);
+    return toSession(session);
 }
 
-export async function getSessionByToken(token: string): Promise<SessionResponse | null> {
+export async function getSessionByToken(token: string): Promise<Session | null> {
     const session = await prisma.session.findUnique({
         where: { token },
     });
 
     if (!session) return null;
 
-    return toSessionResponse(session);
+    return toSession(session);
 }
 
 export async function deleteSession(id: string): Promise<void> {
@@ -40,7 +40,7 @@ export async function deleteSessionsByAdminId(adminId: string): Promise<void> {
 }
 
 
-export function toSessionResponse(session: any): SessionResponse {
+export function toSession(session: any): Session {
     return {
         id: session.id,
         adminId: session.adminId,

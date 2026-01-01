@@ -58,6 +58,7 @@ export default function LoginPage() {
           type="email"
           placeholder="Email"
           value={email}
+          id="email"
           onChange={(e) => setEmail(e.target.value)}
           className="mb-4 p-2 border border-gray-300 rounded"
           required
@@ -66,6 +67,7 @@ export default function LoginPage() {
           type="password"
           placeholder="Password"
           value={password}
+          id="password"
           onChange={(e) => setPassword(e.target.value)}
           className="mb-4 p-2 border border-gray-300 rounded"
           required

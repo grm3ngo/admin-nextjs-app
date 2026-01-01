@@ -1,3 +1,8 @@
+export type Status = 'ACTIVE' | 'INACTIVE';
+export type Role = 'SUPER_ADMIN' | 'ADMIN';
+export type OrderStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'CANCELLED';
+export type PaymentStatus = 'UNPAID' | 'PAID';
+
 export interface ApiResponse<T> { // cau truc tra ve api chung
     success: boolean;
     data?: T;
@@ -20,3 +25,11 @@ export interface PaginatedResponse<T> { //tham so pagination tra ve; co danh sac
   limit: number;
   totalPages: number;
 }
+
+export interface BaseEntity { // cac thuoc tinh co ban cua moi entity
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export type Money = number | string;

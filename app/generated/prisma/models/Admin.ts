@@ -31,7 +31,7 @@ export type AdminMinAggregateOutputType = {
   name: string | null
   avatar: string | null
   role: $Enums.Role | null
-  status: $Enums.AccountStatus | null
+  status: $Enums.Status | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -43,7 +43,7 @@ export type AdminMaxAggregateOutputType = {
   name: string | null
   avatar: string | null
   role: $Enums.Role | null
-  status: $Enums.AccountStatus | null
+  status: $Enums.Status | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -178,7 +178,7 @@ export type AdminGroupByOutputType = {
   name: string
   avatar: string | null
   role: $Enums.Role
-  status: $Enums.AccountStatus
+  status: $Enums.Status
   createdAt: Date
   updatedAt: Date
   _count: AdminCountAggregateOutputType | null
@@ -211,7 +211,7 @@ export type AdminWhereInput = {
   name?: Prisma.StringFilter<"Admin"> | string
   avatar?: Prisma.StringNullableFilter<"Admin"> | string | null
   role?: Prisma.EnumRoleFilter<"Admin"> | $Enums.Role
-  status?: Prisma.EnumAccountStatusFilter<"Admin"> | $Enums.AccountStatus
+  status?: Prisma.EnumStatusFilter<"Admin"> | $Enums.Status
   createdAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
   sessions?: Prisma.SessionListRelationFilter
@@ -240,7 +240,7 @@ export type AdminWhereUniqueInput = Prisma.AtLeast<{
   name?: Prisma.StringFilter<"Admin"> | string
   avatar?: Prisma.StringNullableFilter<"Admin"> | string | null
   role?: Prisma.EnumRoleFilter<"Admin"> | $Enums.Role
-  status?: Prisma.EnumAccountStatusFilter<"Admin"> | $Enums.AccountStatus
+  status?: Prisma.EnumStatusFilter<"Admin"> | $Enums.Status
   createdAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Admin"> | Date | string
   sessions?: Prisma.SessionListRelationFilter
@@ -271,7 +271,7 @@ export type AdminScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"Admin"> | string
   avatar?: Prisma.StringNullableWithAggregatesFilter<"Admin"> | string | null
   role?: Prisma.EnumRoleWithAggregatesFilter<"Admin"> | $Enums.Role
-  status?: Prisma.EnumAccountStatusWithAggregatesFilter<"Admin"> | $Enums.AccountStatus
+  status?: Prisma.EnumStatusWithAggregatesFilter<"Admin"> | $Enums.Status
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Admin"> | Date | string
 }
@@ -283,7 +283,7 @@ export type AdminCreateInput = {
   name: string
   avatar?: string | null
   role?: $Enums.Role
-  status?: $Enums.AccountStatus
+  status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionCreateNestedManyWithoutAdminInput
@@ -296,7 +296,7 @@ export type AdminUncheckedCreateInput = {
   name: string
   avatar?: string | null
   role?: $Enums.Role
-  status?: $Enums.AccountStatus
+  status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutAdminInput
@@ -309,7 +309,7 @@ export type AdminUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUpdateManyWithoutAdminNestedInput
@@ -322,7 +322,7 @@ export type AdminUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutAdminNestedInput
@@ -335,7 +335,7 @@ export type AdminCreateManyInput = {
   name: string
   avatar?: string | null
   role?: $Enums.Role
-  status?: $Enums.AccountStatus
+  status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -347,7 +347,7 @@ export type AdminUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -359,7 +359,7 @@ export type AdminUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -417,8 +417,8 @@ export type EnumRoleFieldUpdateOperationsInput = {
   set?: $Enums.Role
 }
 
-export type EnumAccountStatusFieldUpdateOperationsInput = {
-  set?: $Enums.AccountStatus
+export type EnumStatusFieldUpdateOperationsInput = {
+  set?: $Enums.Status
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -446,7 +446,7 @@ export type AdminCreateWithoutSessionsInput = {
   name: string
   avatar?: string | null
   role?: $Enums.Role
-  status?: $Enums.AccountStatus
+  status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -458,7 +458,7 @@ export type AdminUncheckedCreateWithoutSessionsInput = {
   name: string
   avatar?: string | null
   role?: $Enums.Role
-  status?: $Enums.AccountStatus
+  status?: $Enums.Status
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -486,7 +486,7 @@ export type AdminUpdateWithoutSessionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -498,7 +498,7 @@ export type AdminUncheckedUpdateWithoutSessionsInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   avatar?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   role?: Prisma.EnumRoleFieldUpdateOperationsInput | $Enums.Role
-  status?: Prisma.EnumAccountStatusFieldUpdateOperationsInput | $Enums.AccountStatus
+  status?: Prisma.EnumStatusFieldUpdateOperationsInput | $Enums.Status
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -604,7 +604,7 @@ export type $AdminPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     name: string
     avatar: string | null
     role: $Enums.Role
-    status: $Enums.AccountStatus
+    status: $Enums.Status
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["admin"]>
@@ -1037,7 +1037,7 @@ export interface AdminFieldRefs {
   readonly name: Prisma.FieldRef<"Admin", 'String'>
   readonly avatar: Prisma.FieldRef<"Admin", 'String'>
   readonly role: Prisma.FieldRef<"Admin", 'Role'>
-  readonly status: Prisma.FieldRef<"Admin", 'AccountStatus'>
+  readonly status: Prisma.FieldRef<"Admin", 'Status'>
   readonly createdAt: Prisma.FieldRef<"Admin", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Admin", 'DateTime'>
 }

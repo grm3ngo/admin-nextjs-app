@@ -86,7 +86,7 @@ model Product {
   price       Decimal  @db.Decimal(15, 2)
   quantity    Int      @default(0)
   image       String?
-  status      Status   @default(ACTIVE)
+  status      Status
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
