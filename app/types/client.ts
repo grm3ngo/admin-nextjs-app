@@ -6,6 +6,8 @@ export interface Client extends BaseEntity {
   phone: string | null;
   address: string | null;
   status: Status;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ClientCreateInput {

@@ -28,8 +28,6 @@ export interface PaginatedResponse<T> { //tham so pagination tra ve; co danh sac
 
 export interface BaseEntity { // cac thuoc tinh co ban cua moi entity
   id: string;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export type Money = number | string;

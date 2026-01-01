@@ -10,7 +10,6 @@ export interface Invoice extends BaseEntity {
   paymentStatus: PaymentStatus;
   paidAt: Date | null;
   note: string | null;
-  // Relations
   order?: Order;
   client?: Client;
 }

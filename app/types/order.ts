@@ -15,6 +15,8 @@ export interface Order extends BaseEntity {
   client?: Client;
   items?: OrderItem[];
   invoice?: Invoice;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface OrderItem {

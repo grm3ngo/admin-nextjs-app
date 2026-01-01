@@ -8,6 +8,8 @@ export interface Product extends BaseEntity {
   quantity: number;
   image: string | null;
   status: Status;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface ProductCreateInput {
