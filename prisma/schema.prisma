@@ -12,44 +12,159 @@ enum Role {
   ADMIN
 }
 
-enum AccountStatus {
+enum Status {
   ACTIVE
   INACTIVE
-  SUSPENDED
 }
 
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+}
+
+
 model Admin {
-  id            String        @id @default(cuid())
-  email         String        @unique
-  password      String        
-  name          String
-  avatar        String?
-  role          Role          @default(ADMIN)
-  status        AccountStatus @default(ACTIVE)
-  
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  
-  sessions      Session[]
-  
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  avatar    String?
+  role      Role     @default(ADMIN)
+  status    Status   @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  sessions  Session[]
+
   @@index([email])
-  @@index([role])
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  adminId      String
-  admin        Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
-  
-  token        String   @unique
-  
-  userAgent    String?
-  ipAddress    String?
-  
-  expiresAt    DateTime
-  createdAt    DateTime @default(now())
-  
-  @@index([adminId])
+  id        String   @id @default(cuid())
+  adminId   String
+  admin     Admin    @relation(fields: [adminId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
   @@index([token])
-  @@index([expiresAt])
+}
+
+
+model Client {
+  id        String   @id @default(cuid())
+  name      String
+  email     String?  @unique
+  phone     String?
+  address   String?
+  status    Status   @default(ACTIVE)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orders    Order[]
+  invoices  Invoice[]
+
+  @@index([email])
+  @@index([phone])
+}
+
+
+model Product {
+  id          String   @id @default(cuid())
+  name        String
+  sku         String?  @unique
+  description String?
+  price       Decimal  @db.Decimal(15, 2)
+  quantity    Int      @default(0)
+  image       String?
+  status      Status   @default(ACTIVE)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems  OrderItem[]
+
+  @@index([sku])
+  @@index([name])
+}
+
+
+model Order {
+  id            String        @id @default(cuid())
+  orderNumber   String        @unique @default(cuid())
+
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id])
+
+  status        OrderStatus   @default(PENDING)
+  paymentStatus PaymentStatus @default(UNPAID)
+
+  subtotal      Decimal       @db.Decimal(15, 2)
+  discount      Decimal       @default(0) @db.Decimal(15, 2)
+  total         Decimal       @db.Decimal(15, 2)
+
+  note          String?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  items         OrderItem[]
+  invoice       Invoice?
+
+  @@index([orderNumber])
+  @@index([clientId])
+  @@index([status])
+}
+
+
+model OrderItem {
+  id          String  @id @default(cuid())
+
+  orderId     String
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId   String
+  product     Product @relation(fields: [productId], references: [id])
+
+  productName String  // Snapshot tên sản phẩm
+  quantity    Int
+  unitPrice   Decimal @db.Decimal(15, 2)
+  total       Decimal @db.Decimal(15, 2)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+
+model Invoice {
+  id            String        @id @default(cuid())
+  invoiceNumber String        @unique @default(cuid())
+
+  orderId       String        @unique
+  order         Order         @relation(fields: [orderId], references: [id])
+
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id])
+
+  amount        Decimal       @db.Decimal(15, 2)
+  paymentStatus PaymentStatus @default(UNPAID)
+  paidAt        DateTime?
+
+  note          String?
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([invoiceNumber])
+  @@index([clientId])
+  @@index([paymentStatus])
 }

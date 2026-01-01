@@ -22,9 +22,6 @@ export function proxy(request: NextRequest) {
 
   }
 
-  if (pathname.startsWith('/dashboard') || pathname.startsWith('/admins')) {
-  }
-
   return NextResponse.next();
 }
 

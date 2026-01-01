@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) { // tao admin moi
       );
     }
 
-    const existingAdmin = await getAdminByEmail(body.email);
+    const existingAdmin = await getAdminByEmail(body.email); // kiem tra email da ton tai chua
     if (existingAdmin) {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'Email đã tồn tại' },
