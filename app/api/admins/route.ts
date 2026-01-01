@@ -1,9 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllAdmins, createAdmin } from '@/app/services/admin.services';
+import { getAllAdmins, createAdmin, getAdminByEmail } from '@/app/services/admin.services';
 import { ApiResponse } from '@/app/types';
+import {
+  getAuthenticatedAdmin,
+  unauthorizedResponse,
+  forbiddenResponse,
+  isSuperAdmin,
+} from '@/app/lib/auth';
 
-export async function GET(request: NextRequest) { //lay danh sach admin
+export async function GET(request: NextRequest) { // lay danh sach admin
   try {
+    const currentAdmin = await getAuthenticatedAdmin(request);
+    if (!currentAdmin) {
+      return unauthorizedResponse();
+    }
+
     const { searchParams } = new URL(request.url);
 
     const params = {
@@ -29,8 +40,13 @@ export async function GET(request: NextRequest) { //lay danh sach admin
   }
 }
 
-export async function POST(request: NextRequest) { //tao admin moi
+export async function POST(request: NextRequest) { // tao admin moi
   try {
+    const currentAdmin = await getAuthenticatedAdmin(request);
+    if (!currentAdmin) {
+      return unauthorizedResponse();
+    }
+
     const body = await request.json();
 
     if (!body.email || !body.password || !body.name || !body.role) {
@@ -40,12 +56,24 @@ export async function POST(request: NextRequest) { //tao admin moi
       );
     }
 
+    const existingAdmin = await getAdminByEmail(body.email); // kiem tra email da ton tai chua
+    if (existingAdmin) {
+      return NextResponse.json<ApiResponse<null>>(
+        { success: false, error: 'Email đã tồn tại' },
+        { status: 400 }
+      );
+    }
+
+    if (body.role === 'SUPER_ADMIN' && !isSuperAdmin(currentAdmin)) {
+      return forbiddenResponse('Chỉ Super Admin mới có thể tạo Super Admin khác');
+    }
+
     const admin = await createAdmin(body);
 
-    return NextResponse.json({
-      success: true,
-      data: admin,
-    }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: admin },
+      { status: 201 }
+    );
   } catch (error) {
     console.error('Create admin error:', error);
     return NextResponse.json<ApiResponse<null>>(

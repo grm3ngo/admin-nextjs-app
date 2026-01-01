@@ -3,7 +3,7 @@ import { getAdminByEmail, verifyPassword } from '@/app/services/admin.services';
 import { createSession } from '@/app/services/session.services';
 import { ApiResponse } from '@/app/types';
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) { // thuc hien login
   try {
     const { email, password } = await request.json();
 
@@ -14,14 +14,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const isValid = await verifyPassword(email, password);
+    const isValid = await verifyPassword(email, password); //kiem tra email va password
     if (!isValid) {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'Email hoặc password không đúng' },
         { status: 401 }
       );
     }
-    const admin = await getAdminByEmail(email);
+    const admin = await getAdminByEmail(email); //lay thong tin admin theo email
     if (!admin || admin.status !== 'ACTIVE') {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'Tài khoản bị khóa' },
@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const session = await createSession(admin.id);
+    const session = await createSession(admin.id); //tao session moi
 
     return NextResponse.json({
       success: true,

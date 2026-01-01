@@ -11,7 +11,6 @@ const prisma = new PrismaClient({ adapter });
 async function main() {
   const hashedPassword = await bcrypt.hash('superadmin123', 10);
 
-  // Kiểm tra đã tồn tại chưa
   const existing = await prisma.admin.findUnique({
     where: { email: 'superadmin@admin.com' },
   });
@@ -21,7 +20,6 @@ async function main() {
     return;
   }
 
-  // Tạo mới
   const superadmin = await prisma.admin.create({
     data: {
       email: 'superadmin@admin.com',

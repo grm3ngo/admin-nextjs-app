@@ -1,31 +1,31 @@
-import { NextRequest,NextResponse } from "next/server";
-import { deleteSession } from "@/app/services";
-import { ApiResponse } from "@/app/types";
+import { NextRequest, NextResponse } from 'next/server';
+import { deleteSession } from '@/app/services';
+import { ApiResponse } from '@/app/types';
+import { getAuthenticatedAdmin, unauthorizedResponse } from '@/app/lib/auth';
 
-export async function POST(request: NextRequest) {
-    try {
-    const authentication = request.headers.get("Authorization");
-    const token = authentication?.replace("Bearer ", "");
-
-    if (!token) {
-        return NextResponse.json<ApiResponse<null>>({
-            success: false,
-            error: "Unauthorized",
-            message: "No token provided"
-        }, { status: 401 });
+export async function POST(request: NextRequest) { 
+  try {
+    const currentAdmin = await getAuthenticatedAdmin(request); // check dang nhap
+    if (!currentAdmin) {
+      return unauthorizedResponse();
     }
 
-    await deleteSession(token);
+    const authHeader = request.headers.get('Authorization'); //lay token tu header
+    const token = authHeader?.replace('Bearer ', '');
+
+    if (token) {
+      await deleteSession(token);
+    }
 
     return NextResponse.json<ApiResponse<null>>({
-        success: true,
-        message: "Logged out successfully"
-    }); 
-    } catch (error) {
-        return NextResponse.json<ApiResponse<null>>({
-            success: false,
-            error: "Internal Server Error",
-            message: "An error occurred while processing your request"
-        }, { status: 500 });
-    }
+      success: true,
+      message: 'Đăng xuất thành công',
+    });
+  } catch (error) {
+    console.error('Logout error:', error);
+    return NextResponse.json<ApiResponse<null>>(
+      { success: false, error: 'Lỗi server' },
+      { status: 500 }
+    );
+  }
 }

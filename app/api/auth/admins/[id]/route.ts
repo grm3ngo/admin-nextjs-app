@@ -4,7 +4,7 @@ import { ApiResponse } from '@/app/types';
 
 type Params = { params: { id: string } };
 
-export async function GET(request: NextRequest, { params }: Params) {
+export async function GET({ params }: Params) { //lay thong tin admin theo id
   try {
     const admin = await getAdminById(params.id);
 
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest, { params }: Params) {
   }
 }
 
-export async function PUT(request: NextRequest, { params }: Params) {
+export async function PUT(request: NextRequest, { params }: Params) { //update thong tin admin
   try {
     const body = await request.json();
     const admin = await updateAdmin(params.id, body);
@@ -46,7 +46,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: Params) {
+export async function DELETE({ params }: Params) { //xoa admin
   try {
     await deleteAdmin(params.id);
 
