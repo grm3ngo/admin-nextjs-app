@@ -3,15 +3,14 @@ import { deleteSession } from '@/app/services';
 import { ApiResponse } from '@/app/types';
 import { getAuthenticatedAdmin, unauthorizedResponse } from '@/app/lib/auth';
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) { 
   try {
-    // Kiểm tra đã đăng nhập chưa
-    const currentAdmin = await getAuthenticatedAdmin(request);
+    const currentAdmin = await getAuthenticatedAdmin(request); // check dang nhap
     if (!currentAdmin) {
       return unauthorizedResponse();
     }
 
-    const authHeader = request.headers.get('Authorization');
+    const authHeader = request.headers.get('Authorization'); //lay token tu header
     const token = authHeader?.replace('Bearer ', '');
 
     if (token) {

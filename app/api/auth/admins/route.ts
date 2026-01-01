@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAllAdmins, createAdmin } from '@/app/services/admin.services';
 import { ApiResponse } from '@/app/types';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest) { //lay danh sach admin
   try {
     const { searchParams } = new URL(request.url);
 
@@ -29,11 +29,10 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) { //tao admin moi
   try {
     const body = await request.json();
 
-    // Validate input
     if (!body.email || !body.password || !body.name || !body.role) {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'Thiếu thông tin bắt buộc' },

@@ -26,14 +26,11 @@ export default function DashboardPage() {
 
   return (
     <>
-      {/* Header */}
       <header className="header">
         <h1 className="heading-1">Dashboard</h1>
       </header>
 
-      {/* Content */}
       <div className="container-page">
-        {/* Stats Cards */}
         <section className="mb-responsive">
           <h2 className="heading-2 mb-4">Overview</h2>
           <div className="grid-stats">
@@ -56,7 +53,6 @@ export default function DashboardPage() {
           </div>
         </section>
 
-        {/* Quick Actions */}
         <section className="mb-responsive">
           <h2 className="heading-2 mb-4">Quick Actions</h2>
           <div className="flex-responsive">

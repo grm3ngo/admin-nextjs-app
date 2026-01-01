@@ -11,10 +11,8 @@ import {
 
 type Params = { params: Promise<{ id: string }> };
 
-// GET /api/admins/[id]
-export async function GET(request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, { params }: Params) { //lay thong tin admin theo id
   try {
-    // Kiểm tra đăng nhập
     const currentAdmin = await getAuthenticatedAdmin(request);
     if (!currentAdmin) {
       return unauthorizedResponse();
@@ -43,10 +41,8 @@ export async function GET(request: NextRequest, { params }: Params) {
   }
 }
 
-// PUT /api/admins/[id]
-export async function PUT(request: NextRequest, { params }: Params) {
+export async function PUT(request: NextRequest, { params }: Params) { //update thong tin admin
   try {
-    // Kiểm tra đăng nhập
     const currentAdmin = await getAuthenticatedAdmin(request);
     if (!currentAdmin) {
       return unauthorizedResponse();
@@ -55,7 +51,6 @@ export async function PUT(request: NextRequest, { params }: Params) {
     const { id } = await params;
     const body = await request.json();
 
-    // Lấy thông tin admin cần sửa
     const targetAdmin = await getAdminById(id);
     if (!targetAdmin) {
       return NextResponse.json<ApiResponse<null>>(
@@ -64,8 +59,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
       );
     }
 
-    // Kiểm tra quyền sửa
-    const editCheck = canEditAdmin(currentAdmin, targetAdmin, body.role);
+    const editCheck = canEditAdmin(currentAdmin, targetAdmin, body.role); //check quyen sua
     if (!editCheck.allowed) {
       return forbiddenResponse(editCheck.reason);
     }
@@ -85,8 +79,7 @@ export async function PUT(request: NextRequest, { params }: Params) {
   }
 }
 
-// DELETE /api/admins/[id]
-export async function DELETE(request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) { //xoa admin
   try {
     // Kiểm tra đăng nhập
     const currentAdmin = await getAuthenticatedAdmin(request);
@@ -96,7 +89,6 @@ export async function DELETE(request: NextRequest, { params }: Params) {
 
     const { id } = await params;
 
-    // Lấy thông tin admin cần xóa
     const targetAdmin = await getAdminById(id);
     if (!targetAdmin) {
       return NextResponse.json<ApiResponse<null>>(
@@ -105,13 +97,11 @@ export async function DELETE(request: NextRequest, { params }: Params) {
       );
     }
 
-    // Kiểm tra quyền xóa
-    const deleteCheck = canDeleteAdmin(currentAdmin, id);
+    const deleteCheck = canDeleteAdmin(currentAdmin, id); //check quyen xoa
     if (!deleteCheck.allowed) {
       return forbiddenResponse(deleteCheck.reason);
     }
 
-    // Admin thường không thể xóa SuperAdmin
     if (targetAdmin.role === 'SUPER_ADMIN' && currentAdmin.role !== 'SUPER_ADMIN') {
       return forbiddenResponse('Không có quyền xóa Super Admin');
     }

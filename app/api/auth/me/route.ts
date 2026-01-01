@@ -2,10 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ApiResponse, AdminResponse } from '@/app/types';
 import { getAuthenticatedAdmin, unauthorizedResponse } from '@/app/lib/auth';
 
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest) { //lay thong tin admin hien tai
   try {
-    // Dùng helper thay vì check thủ công
-    const admin = await getAuthenticatedAdmin(request);
+    const admin = await getAuthenticatedAdmin(request); 
     
     if (!admin) {
       return unauthorizedResponse();

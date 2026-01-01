@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAllAdmins, createAdmin } from '@/app/services/admin.services';
+import { getAllAdmins, createAdmin, getAdminByEmail } from '@/app/services/admin.services';
 import { ApiResponse } from '@/app/types';
 import {
   getAuthenticatedAdmin,
@@ -8,10 +8,8 @@ import {
   isSuperAdmin,
 } from '@/app/lib/auth';
 
-// GET /api/admins - Lấy danh sách admin
-export async function GET(request: NextRequest) {
+export async function GET(request: NextRequest) { // lay danh sach admin
   try {
-    // Kiểm tra đăng nhập
     const currentAdmin = await getAuthenticatedAdmin(request);
     if (!currentAdmin) {
       return unauthorizedResponse();
@@ -42,10 +40,8 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/admins - Tạo admin mới
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest) { // tao admin moi
   try {
-    // Kiểm tra đăng nhập
     const currentAdmin = await getAuthenticatedAdmin(request);
     if (!currentAdmin) {
       return unauthorizedResponse();
@@ -53,7 +49,6 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    // Validate input
     if (!body.email || !body.password || !body.name || !body.role) {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'Thiếu thông tin bắt buộc' },
@@ -61,7 +56,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Chỉ SuperAdmin mới có thể tạo SuperAdmin
+    const existingAdmin = await getAdminByEmail(body.email);
+    if (existingAdmin) {
+      return NextResponse.json<ApiResponse<null>>(
+        { success: false, error: 'Email đã tồn tại' },
+        { status: 400 }
+      );
+    }
+
     if (body.role === 'SUPER_ADMIN' && !isSuperAdmin(currentAdmin)) {
       return forbiddenResponse('Chỉ Super Admin mới có thể tạo Super Admin khác');
     }

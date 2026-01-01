@@ -40,12 +40,10 @@ export default function NewAdminPage() {
 
   return (
     <>
-      {/* Header */}
       <header className="header">
         <h1 className="heading-1">Add New Admin</h1>
       </header>
 
-      {/* Content */}
       <div className="container-page">
         <Card className="max-w-lg">
           <form onSubmit={handleSubmit}>

@@ -29,7 +29,6 @@ export function ToastProvider({ children }: { children: ReactNode }) {
     const newToast = { ...toast, id };
     setToasts((prev) => [...prev, newToast]);
 
-    // Auto remove after duration
     const duration = toast.duration || 5000;
     setTimeout(() => {
       removeToast(id);
@@ -72,7 +71,6 @@ export function useToast() {
   return context;
 }
 
-// Toast Container Component
 function ToastContainer({ toasts, onRemove }: { toasts: Toast[]; onRemove: (id: string) => void }) {
   if (toasts.length === 0) return null;
 

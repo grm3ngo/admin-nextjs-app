@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getStats, getAdminsByRole, getAdminsByStatus } from '@/app/services/dashboard.services';
 import { ApiResponse } from '@/app/types';
 
-export async function GET() {
+export async function GET() { //lay thong ke dashboard
   try {
     const [stats, byRole, byStatus] = await Promise.all([
       getStats(),

@@ -20,7 +20,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="layout-dashboard">
-      {/* Sidebar */}
       <aside className="sidebar">
         <div className="sidebar-header">
           <h2 className="text-xl font-bold">Admin Panel</h2>
@@ -48,7 +47,6 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="main-content">
         {children}
       </main>

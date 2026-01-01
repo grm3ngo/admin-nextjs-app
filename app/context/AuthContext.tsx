@@ -1,3 +1,5 @@
+// 
+
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
@@ -69,7 +71,6 @@ export function AuthProvider({ children }: { children: ReactNode }) { //tao prov
     }
   }
 
-  // Đăng xuất
   async function logout(): Promise<void> { //dang xuat
     try {
       const token = localStorage.getItem('token');

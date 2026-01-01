@@ -1,3 +1,6 @@
+//export cac functions va interfaces lien quan den xac thuc va quyen truy cap
+// lay thong tin admin tu token, kiem tra quyen truy cap, phan hoi loi
+
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionByToken } from '@/app/services/session.services';
 import { getAdminById } from '@/app/services/admin.services';
@@ -7,11 +10,10 @@ export interface AuthenticatedRequest {
   currentAdmin: AdminResponse;
 }
 
-// Lấy thông tin admin từ token
-export async function getAuthenticatedAdmin(
+export async function getAuthenticatedAdmin( //lay thong tin admin tu token
   request: NextRequest
 ): Promise<AdminResponse | null> {
-  const authHeader = request.headers.get('Authorization');
+  const authHeader = request.headers.get('Authorization'); //lay token tu header
   const token = authHeader?.replace('Bearer ', '');
 
   if (!token) return null;
@@ -19,8 +21,7 @@ export async function getAuthenticatedAdmin(
   const session = await getSessionByToken(token);
   if (!session) return null;
 
-  // Kiểm tra session hết hạn
-  if (new Date(session.expiresAt) < new Date()) {
+  if (new Date(session.expiresAt) < new Date()) { //check token het han
     return null;
   }
 
@@ -28,45 +29,38 @@ export async function getAuthenticatedAdmin(
   return admin;
 }
 
-// Response lỗi unauthorized
-export function unauthorizedResponse() {
+export function unauthorizedResponse() { //phan hoi loi chua dang nhap
   return NextResponse.json<ApiResponse<null>>(
     { success: false, error: 'Chưa đăng nhập hoặc token hết hạn' },
     { status: 401 }
   );
 }
 
-// Response lỗi forbidden
-export function forbiddenResponse(message = 'Không có quyền thực hiện') {
+export function forbiddenResponse(message = 'Không có quyền thực hiện') { // phan hoi loi khong co quyen
   return NextResponse.json<ApiResponse<null>>(
     { success: false, error: message },
     { status: 403 }
   );
 }
 
-// Kiểm tra có phải SuperAdmin không
-export function isSuperAdmin(admin: AdminResponse): boolean {
+export function isSuperAdmin(admin: AdminResponse): boolean { //check co phai superadmin khong
   return admin.role === 'SUPER_ADMIN';
 }
 
-// Kiểm tra có thể thay đổi role không
 export function canChangeRole(
-  currentAdmin: AdminResponse,
+  currentAdmin: AdminResponse, //check co the thay doi role khong
   targetRole: string
 ): boolean {
-  // Chỉ SuperAdmin mới có thể tạo/chỉnh SuperAdmin
   if (targetRole === 'SUPER_ADMIN') {
     return isSuperAdmin(currentAdmin);
   }
   return true;
 }
 
-// Kiểm tra có thể xóa admin không
-export function canDeleteAdmin(
+export function canDeleteAdmin( //check co the xoa admin khong
   currentAdmin: AdminResponse,
   targetAdminId: string
 ): { allowed: boolean; reason?: string } {
-  // Không thể tự xóa chính mình
   if (currentAdmin.id === targetAdminId) {
     return { allowed: false, reason: 'Không thể tự xóa chính mình' };
   }
@@ -74,18 +68,15 @@ export function canDeleteAdmin(
   return { allowed: true };
 }
 
-// Kiểm tra có thể sửa admin không
-export function canEditAdmin(
+export function canEditAdmin( //check co the sua admin khong
   currentAdmin: AdminResponse,
   targetAdmin: AdminResponse,
   newRole?: string
 ): { allowed: boolean; reason?: string } {
-  // Admin thường không thể sửa SuperAdmin
   if (!isSuperAdmin(currentAdmin) && isSuperAdmin(targetAdmin)) {
     return { allowed: false, reason: 'Không có quyền sửa Super Admin' };
   }
 
-  // Chỉ SuperAdmin mới có thể thăng cấp thành SuperAdmin
   if (newRole === 'SUPER_ADMIN' && !isSuperAdmin(currentAdmin)) {
     return { allowed: false, reason: 'Chỉ Super Admin mới có thể tạo Super Admin khác' };
   }

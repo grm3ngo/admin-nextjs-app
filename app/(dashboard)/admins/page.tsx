@@ -39,7 +39,6 @@ export default function AdminsPage() {
 
   return (
     <>
-      {/* Header */}
       <header className="header flex-responsive items-center justify-between">
         <h1 className="heading-1">Admins</h1>
         <Link href="/admins/new">
@@ -47,7 +46,6 @@ export default function AdminsPage() {
         </Link>
       </header>
 
-      {/* Content */}
       <div className="container-page">
         <Card>
           {loading ? (

@@ -1,4 +1,5 @@
-// lib/prisma.ts
+//config prisma su dung postgresql lam database
+
 import { PrismaClient } from "@/app/generated/prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 

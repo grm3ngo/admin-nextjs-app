@@ -59,7 +59,6 @@ export default function EditAdminPage() {
       status: form.status,
     };
 
-    // Only include password if changed
     if (form.password) {
       body.password = form.password;
     }
@@ -90,12 +89,10 @@ export default function EditAdminPage() {
 
   return (
     <>
-      {/* Header */}
       <header className="header">
         <h1 className="heading-1">Edit Admin</h1>
       </header>
 
-      {/* Content */}
       <div className="container-page">
         <Card className="max-w-lg">
           <form onSubmit={handleSubmit}>

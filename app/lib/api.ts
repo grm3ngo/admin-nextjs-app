@@ -1,4 +1,5 @@
-// Helper để gọi API với token từ localStorage
+// helper de goi API tu frontend
+// xy ly token va phan hoi loi
 
 type FetchOptions = RequestInit & {
   skipAuth?: boolean;
@@ -10,14 +11,13 @@ export async function apiFetch<T>(
 ): Promise<{ success: boolean; data?: T; error?: string }> {
   const { skipAuth, ...fetchOptions } = options;
 
-  // Thêm Authorization header nếu có token
-  const headers: HeadersInit = {
+  const headers: HeadersInit = { // them headers mac dinh
     'Content-Type': 'application/json',
     ...fetchOptions.headers,
   };
 
   if (!skipAuth) {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('token'); //lay token tu localStorage
     if (token) {
       (headers as Record<string, string>)['Authorization'] = `Bearer ${token}`;
     }
@@ -32,8 +32,7 @@ export async function apiFetch<T>(
     const data = await res.json();
 
     if (!res.ok) {
-      // Nếu 401, xóa token và redirect về login
-      if (res.status === 401) {
+      if (res.status === 401) { // neu chua dang nhap hoac token het han
         localStorage.removeItem('token');
         window.location.href = '/login';
         return { success: false, error: data.error || 'Phiên đăng nhập hết hạn' };
@@ -49,8 +48,7 @@ export async function apiFetch<T>(
   }
 }
 
-// Shorthand methods
-export const api = {
+export const api = { // cac phuong thuc api
   get: <T>(url: string) => apiFetch<T>(url, { method: 'GET' }),
 
   post: <T>(url: string, body: unknown) =>
