@@ -1,9 +1,9 @@
 import bcrypt from 'bcryptjs';
 import prisma from '../lib/prisma';
-import { AdminResponse, CreateAdminRequest, UpdateAdminRequest } from '../types/admin';
+import { Admin, AdminCreateInput, AdminUpdateInput } from '../types/admin';
 import { PaginationParams, PaginatedResponse } from '../types';
 
-export async function createAdmin(data: CreateAdminRequest): Promise<AdminResponse> {
+export async function createAdmin(data: AdminCreateInput): Promise<Admin> {
     const hashedPassword = await bcrypt.hash(data.password, 10);
     const admin = await prisma.admin.create({
         data: {
@@ -15,10 +15,10 @@ export async function createAdmin(data: CreateAdminRequest): Promise<AdminRespon
         },
     });
 
-    return toAdminResponse(admin);
+    return toAdmin(admin);
 }
 
-export async function getAllAdmins(params: PaginationParams): Promise<PaginatedResponse<AdminResponse>> {
+export async function getAllAdmins(params: PaginationParams): Promise<PaginatedResponse<Admin>> {
   const { page = 1, limit = 10, search, sortBy = 'createdAt', sortOrder = 'desc' } = params;
   const skip = (page - 1) * limit;
 
@@ -31,7 +31,7 @@ export async function getAllAdmins(params: PaginationParams): Promise<PaginatedR
       }
     : {};
 
-  const [admins, total] = await Promise.all([
+  const [Admins, total] = await Promise.all([
     prisma.admin.findMany({
       where,
       skip,
@@ -42,16 +42,7 @@ export async function getAllAdmins(params: PaginationParams): Promise<PaginatedR
   ]);
 
   return {
-    data: admins.map(admin => ({
-      id: admin.id,
-      email: admin.email,
-      name: admin.name,
-      avatar: admin.avatar ?? undefined,
-      role: admin.role,
-      status: admin.status,
-      createdAt: admin.createdAt,
-      updatedAt: admin.updatedAt,
-    })),
+    data: Admins.map(toAdmin),
     total,
     page,
     limit,
@@ -59,28 +50,28 @@ export async function getAllAdmins(params: PaginationParams): Promise<PaginatedR
   };
 }
 
-export async function getAdminById(id:string): Promise<AdminResponse | null> {
+export async function getAdminById(id:string): Promise<Admin | null> {
   const admin = await prisma.admin.findUnique({
     where: { id },
   });
 
   if (!admin) return null;
 
-  return toAdminResponse(admin);
+  return toAdmin(admin);
 
 }
 
-export async function getAdminByEmail(email: string): Promise<AdminResponse | null> {
+export async function getAdminByEmail(email: string): Promise<Admin | null> {
   const admin = await prisma.admin.findUnique({
     where: { email },
   });
 
   if (!admin) return null;
 
-  return toAdminResponse(admin);
+  return toAdmin(admin);
 }
 
-export async function updateAdmin(id: string, data: UpdateAdminRequest): Promise<AdminResponse> {
+export async function updateAdmin(id: string, data: AdminUpdateInput): Promise<Admin> {
   const updateData: any = { ...data };
 
   if (data.password) {
@@ -92,7 +83,7 @@ export async function updateAdmin(id: string, data: UpdateAdminRequest): Promise
     data: updateData,
   });
 
-  return toAdminResponse(admin);
+  return toAdmin(admin);
 }
 
 export async function deleteAdmin(id: string): Promise<void> {
@@ -111,7 +102,15 @@ export async function verifyPassword(email: string, plainPassword: string): Prom
   return bcrypt.compare(plainPassword, admin.password);
 }
 
-function toAdminResponse(admin: any): AdminResponse { //helper giup tranh lap code
+export async function changePassword(id: string, newPassword: string): Promise<void> {
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await prisma.admin.update({
+    where: { id },
+    data: { password: hashedPassword },
+  });
+}
+
+function toAdmin(admin: any): Admin { //helper giup tranh lap code
   return {
     id: admin.id,
     email: admin.email,

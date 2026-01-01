@@ -8,6 +8,8 @@ export interface Admin extends BaseEntity {
   role: Role;
   status: Status;
   sessions?: Session[];
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface AdminCreateInput {
