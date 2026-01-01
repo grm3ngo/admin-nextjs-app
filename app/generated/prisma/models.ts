@@ -10,4 +10,9 @@
  */
 export type * from './models/Admin'
 export type * from './models/Session'
+export type * from './models/Client'
+export type * from './models/Product'
+export type * from './models/Order'
+export type * from './models/OrderItem'
+export type * from './models/Invoice'
 export type * from './commonInputTypes'
