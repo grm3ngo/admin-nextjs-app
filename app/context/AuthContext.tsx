@@ -1,12 +1,10 @@
-// 
-
 "use client";
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AdminResponse } from '../types';
+import { Admin } from '../types';
 
 interface AuthContextType { //dinh nghia kieu cho context
-  admin: AdminResponse | null;       // thong tin admin
+  admin: Admin | null;       // thong tin admin
   isLoading: boolean;                 
   isAuthenticated: boolean;           
   login: (email: string, password: string) => Promise<boolean>;  // dnhap ; tra ve true/false
@@ -16,7 +14,7 @@ interface AuthContextType { //dinh nghia kieu cho context
 const AuthContext = createContext<AuthContextType | undefined>(undefined); //tao context voi kieu AuthContextType hoac undefined
 
 export function AuthProvider({ children }: { children: ReactNode }) { //tao provider de boc quanh app
-  const [admin, setAdmin] = useState<AdminResponse | null>(null);
+  const [admin, setAdmin] = useState<Admin | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => { // can kiem tra auth khi load app

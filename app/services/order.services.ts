@@ -2,6 +2,44 @@ import prisma from '../lib/prisma';
 import { Order, OrderCreateInput, OrderUpdateInput, OrderItem, OrderItemInput } from '../types/order';
 import { PaginationParams, PaginatedResponse, OrderStatus, PaymentStatus } from '../types';
 
+/**
+ * Generate order number with format: DH + YYYYMM + XX
+ * Example: DH20260101, DH20260102, ...
+ */
+async function generateOrderNumber(): Promise<string> {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const prefix = `DH${year}${month}`;
+
+  // Find the last order of this month
+  const lastOrder = await prisma.order.findFirst({
+    where: {
+      orderNumber: {
+        startsWith: prefix,
+      },
+    },
+    orderBy: {
+      orderNumber: 'desc',
+    },
+    select: {
+      orderNumber: true,
+    },
+  });
+
+  let nextNumber = 1;
+  if (lastOrder) {
+    // Extract the sequence number from the last order number
+    const lastSequence = parseInt(lastOrder.orderNumber.slice(prefix.length), 10);
+    if (!isNaN(lastSequence)) {
+      nextNumber = lastSequence + 1;
+    }
+  }
+
+  // Format: DH + YYYYMM + XX (2 digits, padded with zeros)
+  return `${prefix}${String(nextNumber).padStart(2, '0')}`;
+}
+
 export async function createOrderWithItems(
   clientId: string,
   items: OrderItemInput[],
@@ -35,9 +73,12 @@ export async function createOrderWithItems(
   const subtotal = orderItems.reduce((sum, item) => sum + item.total, 0);
   const total = subtotal - discount;
 
+  // Generate order number
+  const orderNumber = await generateOrderNumber();
 
   const order = await prisma.order.create({
     data: {
+      orderNumber,
       clientId,
       subtotal,
       discount,

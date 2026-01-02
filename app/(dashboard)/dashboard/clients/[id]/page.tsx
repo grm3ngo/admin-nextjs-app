@@ -4,9 +4,9 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { Button, Input, Card } from '@/app/components';
 import { api } from '@/app/lib/api';
-import { AdminResponse } from '@/app/types';
+import { Client } from '@/app/types';
 
-export default function EditAdminPage() {
+export default function EditClientPage() {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
@@ -14,33 +14,31 @@ export default function EditAdminPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
-
   const [form, setForm] = useState({
-    email: '',
     name: '',
-    password: '',
-    role: 'ADMIN',
+    email: '',
+    phone: '',
+    address: '',
     status: 'ACTIVE',
-  });
-
+    });
   useEffect(() => {
-    async function fetchAdmin() {
-      const result = await api.get<AdminResponse>(`/api/admins/${id}`);
+    async function fetchClient() {
+      const result = await api.get<Client>(`/api/clients/${id}`);
 
       if (result.success && result.data) {
         setForm({
-          email: result.data.email,
-          name: result.data.name,
-          password: '',
-          role: result.data.role,
-          status: result.data.status,
+            name: result.data.name,
+            email: result.data.email || '',
+            phone: result.data.phone || '',
+            address: result.data.address || '',
+            status: result.data.status,
         });
       } else {
         setError(result.error || 'Không thể tải thông tin admin');
       }
       setLoading(false);
     }
-    fetchAdmin();
+    fetchClient();
   }, [id]);
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
@@ -55,18 +53,15 @@ export default function EditAdminPage() {
     const body: Record<string, string> = {
       email: form.email,
       name: form.name,
-      role: form.role,
+      phone: form.phone,
+      address: form.address,
       status: form.status,
     };
 
-    if (form.password) {
-      body.password = form.password;
-    }
-
-    const result = await api.put<AdminResponse>(`/api/admins/${id}`, body);
+    const result = await api.put<Client>(`/api/clients/${id}`, body);
 
     if (result.success) {
-      router.push('/admins');
+      router.push('/dashboard/clients');
     } else {
       setError(result.error || 'Không thể cập nhật admin');
     }
@@ -78,7 +73,7 @@ export default function EditAdminPage() {
     return (
       <>
         <header className="header">
-          <h1 className="heading-1">Edit Admin</h1>
+          <h1 className="heading-1">Edit Client</h1>
         </header>
         <div className="container-page">
           <p className="text-muted">Loading...</p>
@@ -90,7 +85,7 @@ export default function EditAdminPage() {
   return (
     <>
       <header className="header">
-        <h1 className="heading-1">Edit Admin</h1>
+        <h1 className="heading-1">Edit Client</h1>
       </header>
 
       <div className="container-page">
@@ -120,25 +115,20 @@ export default function EditAdminPage() {
             />
 
             <Input
-              label="Password (leave blank to keep current)"
-              name="password"
-              type="password"
-              value={form.password}
-              onChange={handleChange}
+
+                label="Phone"
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+            />
+            
+            <Input
+                label="Address"
+                name="address"
+                value={form.address}
+                onChange={handleChange}
             />
 
-            <div className="mb-4">
-              <label className="label">Role</label>
-              <select
-                name="role"
-                value={form.role}
-                onChange={handleChange}
-                className="input"
-              >
-                <option value="ADMIN">Admin</option>
-                <option value="SUPER_ADMIN">Super Admin</option>
-              </select>
-            </div>
 
             <div className="mb-4">
               <label className="label">Status</label>
@@ -150,7 +140,6 @@ export default function EditAdminPage() {
               >
                 <option value="ACTIVE">Active</option>
                 <option value="INACTIVE">Inactive</option>
-                <option value="SUSPENDED">Suspended</option>
               </select>
             </div>
 

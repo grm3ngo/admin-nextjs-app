@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { deleteSession } from '@/app/services';
+import { deleteSession, deleteSessionByToken } from '@/app/services';
 import { ApiResponse } from '@/app/types';
 import { getAuthenticatedAdmin, unauthorizedResponse } from '@/app/lib/auth';
 
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     const token = authHeader?.replace('Bearer ', '');
 
     if (token) {
-      await deleteSession(token);
+      await deleteSessionByToken(token);
     }
 
     return NextResponse.json<ApiResponse<null>>({

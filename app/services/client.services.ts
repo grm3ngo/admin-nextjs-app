@@ -81,6 +81,14 @@ export async function updateClient(id: string, data: ClientUpdateInput): Promise
 }
 
 export async function deleteClient(id: string): Promise<void> {
+  const ordersCount = await prisma.order.count({
+    where: { clientId: id },
+  });
+
+  if (ordersCount > 0) {
+    throw new Error(`Cannot delete client: ${ordersCount} order(s) are associated with this client`);
+  }
+
   await prisma.client.delete({
     where: { id },
   });

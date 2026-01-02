@@ -20,7 +20,7 @@ export async function GET(request: NextRequest, { params }: Params) { //lay thon
 
     const { id } = await params;
     const admin = await getAdminById(id);
-
+// 
     if (!admin) {
       return NextResponse.json<ApiResponse<null>>(
         { success: false, error: 'Admin không tồn tại' },

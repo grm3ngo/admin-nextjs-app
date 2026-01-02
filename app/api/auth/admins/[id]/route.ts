@@ -4,9 +4,11 @@ import { ApiResponse } from '@/app/types';
 
 type Params = { params: { id: string } };
 
-export async function GET({ params }: Params) { //lay thong tin admin theo id
+export async function GET(request: NextRequest, { params }: Params) { //lay thong tin admin theo id
+
   try {
-    const admin = await getAdminById(params.id);
+    const { id } = await params;
+    const admin = await getAdminById(id);
 
     if (!admin) {
       return NextResponse.json<ApiResponse<null>>(

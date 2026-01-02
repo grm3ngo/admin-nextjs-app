@@ -4,15 +4,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionByToken } from '@/app/services/session.services';
 import { getAdminById } from '@/app/services/admin.services';
-import { AdminResponse, ApiResponse } from '@/app/types';
+import { Admin, ApiResponse } from '@/app/types';
 
 export interface AuthenticatedRequest {
-  currentAdmin: AdminResponse;
+  currentAdmin: Admin;
 }
 
 export async function getAuthenticatedAdmin( //lay thong tin admin tu token
   request: NextRequest
-): Promise<AdminResponse | null> {
+): Promise<Admin | null> {
   const authHeader = request.headers.get('Authorization'); //lay token tu header
   const token = authHeader?.replace('Bearer ', '');
 
@@ -43,12 +43,12 @@ export function forbiddenResponse(message = 'Không có quyền thực hiện') 
   );
 }
 
-export function isSuperAdmin(admin: AdminResponse): boolean { //check co phai superadmin khong
+export function isSuperAdmin(admin: Admin): boolean { //check co phai superadmin khong
   return admin.role === 'SUPER_ADMIN';
 }
 
 export function canChangeRole(
-  currentAdmin: AdminResponse, //check co the thay doi role khong
+  currentAdmin: Admin, //check co the thay doi role khong
   targetRole: string
 ): boolean {
   if (targetRole === 'SUPER_ADMIN') {
@@ -58,7 +58,7 @@ export function canChangeRole(
 }
 
 export function canDeleteAdmin( //check co the xoa admin khong
-  currentAdmin: AdminResponse,
+  currentAdmin: Admin,
   targetAdminId: string
 ): { allowed: boolean; reason?: string } {
   if (currentAdmin.id === targetAdminId) {
@@ -69,8 +69,8 @@ export function canDeleteAdmin( //check co the xoa admin khong
 }
 
 export function canEditAdmin( //check co the sua admin khong
-  currentAdmin: AdminResponse,
-  targetAdmin: AdminResponse,
+  currentAdmin: Admin,
+  targetAdmin: Admin,
   newRole?: string
 ): { allowed: boolean; reason?: string } {
   if (!isSuperAdmin(currentAdmin) && isSuperAdmin(targetAdmin)) {
