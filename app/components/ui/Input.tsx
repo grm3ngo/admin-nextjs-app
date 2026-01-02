@@ -3,11 +3,13 @@ import { InputHTMLAttributes } from 'react';
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   label?: string;
   error?: string;
+  hint?: string;
 }
 
 export function Input({
   label,
   error,
+  hint,
   className = '',
   id,
   ...props
@@ -15,21 +17,23 @@ export function Input({
   const inputId = id || props.name;
 
   return (
-    <div className="mb-4">
+    <div className="form-group">
       {label && (
-        <label htmlFor={inputId} className="label">
+        <label htmlFor={inputId} className="form-label">
           {label}
+          {props.required && <span className="text-danger ml-1">*</span>}
         </label>
       )}
       <input
         id={inputId}
-        className={`input ${error ? 'border-red-500' : ''} ${className}`}
+        className={`form-input ${error ? 'error' : ''} ${className}`}
         {...props}
       />
+      {hint && !error && (
+        <p className="text-muted text-sm mt-1">{hint}</p>
+      )}
       {error && (
-        <p className="text-sm mt-1" style={{ color: 'var(--color-danger)' }}>
-          {error}
-        </p>
+        <p className="form-error">{error}</p>
       )}
     </div>
   );

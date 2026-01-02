@@ -33,6 +33,12 @@ export async function deleteSession(id: string): Promise<void> {
     });
 }
 
+export async function deleteSessionByToken(token: string): Promise<void> {
+    await prisma.session.delete({
+        where: { token },
+    });
+}
+
 export async function deleteSessionsByAdminId(adminId: string): Promise<void> {
     await prisma.session.deleteMany({
         where: { adminId },

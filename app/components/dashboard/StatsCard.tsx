@@ -5,6 +5,8 @@ interface StatsCardProps {
   value: string | number;
   icon?: ReactNode;
   iconBgColor?: string;
+  change?: number;
+  changeLabel?: string;
   className?: string;
 }
 
@@ -13,18 +15,26 @@ export function StatsCard({
   value, 
   icon,
   iconBgColor = 'bg-blue-500',
+  change,
+  changeLabel,
   className = '' 
 }: StatsCardProps) {
   return (
-    <div className={`stats-card ${className}`}>
+    <div className={`stat-card ${className}`}>
       {icon && (
-        <div className={`stats-card-icon ${iconBgColor}`}>
+        <div className={`stat-icon ${iconBgColor}`}>
           {icon}
         </div>
       )}
-      <div className="stats-card-content">
-        <span className="stats-card-title">{title}</span>
-        <span className="stats-card-value">{value}</span>
+      <div className="stat-content">
+        <span className="stat-label">{title}</span>
+        <span className="stat-value">{value}</span>
+        {change !== undefined && (
+          <span className={`stat-change ${change >= 0 ? 'positive' : 'negative'}`}>
+            {change >= 0 ? '↑' : '↓'} {Math.abs(change)}%
+            {changeLabel && <span className="ml-1">{changeLabel}</span>}
+          </span>
+        )}
       </div>
     </div>
   );

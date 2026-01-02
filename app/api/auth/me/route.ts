@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { ApiResponse, AdminResponse } from '@/app/types';
+import { ApiResponse, Admin } from '@/app/types';
 import { getAuthenticatedAdmin, unauthorizedResponse } from '@/app/lib/auth';
 
 export async function GET(request: NextRequest) { //lay thong tin admin hien tai
@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) { //lay thong tin admin hien tai
       return unauthorizedResponse();
     }
 
-    return NextResponse.json<ApiResponse<AdminResponse>>({
+    return NextResponse.json<ApiResponse<Admin>>({
       success: true,
       data: admin,
     });

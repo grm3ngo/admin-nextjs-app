@@ -1,168 +1,155 @@
 'use client';
 
-import { useState, useRef, useEffect, ReactNode } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { useUser } from '@/app/hooks/useUser';
 import { useRouter } from 'next/navigation';
+import { useUser } from '@/app/hooks/useUser';
+import { useAuth } from '@/app/context/AuthContext';
 
 interface HeaderProps {
   title?: string;
-  children?: ReactNode;
-  userName?: string;
-  userAvatar?: string;
+  onMenuClick: () => void;
+  children?: React.ReactNode;
 }
 
-interface MenuItem {
-  label: string;
-  href: string;
-  icon?: ReactNode;
-}
+const MenuIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/>
+  </svg>
+);
 
-interface HeaderProps {
-  title?: string;
-  children?: ReactNode;
-  menuItems?: MenuItem[];
-  onLogout?: () => void;
-}
+const BellIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+  </svg>
+);
 
-function getInitials(name: string) { return name.split(' ').map(word => word.charAt(0)).join('').toUpperCase().slice(0, 2)};
-
-export function Header({ title, children, menuItems = [], onLogout }: HeaderProps) {
-    const { user, isLoading } = useUser();
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-
-    const router = useRouter();
-
-    useEffect(() => {
-      function handleClickOutside(e: MouseEvent) {
-        if(dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-          setIsDropdownOpen(false);
-        }
-      }
-      document.addEventListener('mousedown',handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown',handleClickOutside);
-      }
-    }, []);
-
-    if (isLoading) {
-    return (
-      <header className="header">
-        <div className="header-left">
-          {title && <h1 className="header-title">{title}</h1>}
-        </div>
-        <div className="header-right">
-          {children}
-          <div className="header-user-skeleton">
-            <div className="skeleton-avatar" />
-            <div className="skeleton-text" />
-          </div>
-        </div>
-      </header>
-    );
+function stringToColor(str: string): string {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = str.charCodeAt(i) + ((hash << 5) - hash);
   }
+  const colors = [
+    '#3B82F6', '#10B981', '#F59E0B', '#EF4444', 
+    '#8B5CF6', '#EC4899', '#06B6D4', '#84CC16'
+  ];
+  return colors[Math.abs(hash) % colors.length];
+}
+
+function getInitials(name: string): string {
+  return name
+    .split(' ')
+    .map(word => word.charAt(0))
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+}
+
+export function Header({ title, onMenuClick, children }: HeaderProps) {
+  const router = useRouter();
+  const { user, isLoading } = useUser();
+  const { logout } = useAuth();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   const userName = user?.name || 'Admin';
-  const userEmail = user?.email;
-  const userAvatar = user?.avatarUrl;
+  const userEmail = user?.email || '';
+  const avatarColor = stringToColor(userName);
   const initials = getInitials(userName);
 
   return (
-    <header className="header">
-      <div className="header-left">
-        {title && <h1 className="header-title">{title}</h1>}
-      </div>
-      <div className="header-right">
-        {children}
-        
-        <div className="header-user-dropdown" ref={dropdownRef}>
-          <button 
-            className="header-user-button"
+    <header className="header-container">
+      
+      <button 
+        onClick={onMenuClick}
+        className="header-menu-btn md:hidden"
+        aria-label="Toggle menu"
+      >
+        <MenuIcon />
+      </button>
+
+      
+      <div className="flex-1" />
+
+      
+      <div className="header-actions">
+
+        <div className="relative" ref={dropdownRef}>
+          <button
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            aria-expanded={isDropdownOpen}
+            className="header-user-btn"
           >
-            <div 
-              className="header-avatar"
-              style={{ backgroundColor: userAvatar }}
-            >
-              {userAvatar ? (
-                <img src={userAvatar} alt={userName} className="header-avatar-img" />
-              ) : (
-                <span className="header-avatar-initials">{initials}</span>
-              )}
-            </div>
+            {isLoading ? (
+              <div className="header-avatar loading" />
+            ) : (
+              <div 
+                className="header-avatar"
+                style={{ backgroundColor: avatarColor }}
+              >
+                {initials}
+              </div>
+            )}
             <div className="header-user-info">
-              <span className="header-username">{userName}</span>
-              {userEmail && <span className="header-useremail">{userEmail}</span>}
+              <span className="header-user-name">
+                {isLoading ? '...' : userName}
+              </span>
+              <span className="header-user-role">Administrator</span>
             </div>
             <svg 
-              className={`header-dropdown-arrow ${isDropdownOpen ? 'open' : ''}`}
-              width="16" 
-              height="16" 
-              viewBox="0 0 16 16"
-              fill="currentColor"
+              className={`header-chevron ${isDropdownOpen ? 'rotate' : ''}`}
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
             >
-              <path d="M4 6l4 4 4-4H4z"/>
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </button>
 
           {isDropdownOpen && (
-            <div className="header-dropdown-menu">
-              <div className="dropdown-user-header">
+            <div className="header-dropdown">
+              <div className="header-dropdown-header">
                 <div 
-                  className="dropdown-avatar"
-                  style={{ backgroundColor: userAvatar }}
+                  className="header-avatar large"
+                  style={{ backgroundColor: avatarColor }}
                 >
-                  {userAvatar ? (
-                    <img src={userAvatar} alt={userName} className="dropdown-avatar-img" />
-                  ) : (
-                    <span className="dropdown-avatar-initials">{initials}</span>
-                  )}
+                  {initials}
                 </div>
-                <div className="dropdown-user-info">
-                  <span className="dropdown-username">{userName}</span>
-                  {userEmail && <span className="dropdown-useremail">{userEmail}</span>}
+                <div>
+                  <p className="header-dropdown-name">{userName}</p>
+                  <p className="header-dropdown-email">{userEmail}</p>
                 </div>
               </div>
-              
-              <div className="dropdown-divider" />
 
-              {menuItems.length > 0 && (
-                <>
-                  <div className="dropdown-section">
-                    {menuItems.map((item, index) => (
-                      <Link 
-                        key={index}
-                        href={item.href}
-                        className="dropdown-item"
-                        onClick={() => setIsDropdownOpen(false)}
-                      >
-                        {item.icon && <span className="dropdown-icon">{item.icon}</span>}
-                        {item.label}
-                      </Link>
-                    ))}
-                  </div>
-                  <div className="dropdown-divider" />
-                </>
-              )}
-              
-              {onLogout && (
-                <button 
-                  className="dropdown-item dropdown-item-danger"
-                  onClick={() => {
-                    setIsDropdownOpen(false);
-                    onLogout();
-                  }}
+              <div className="header-dropdown-footer">
+                <button
+                  onClick={handleLogout}
+                  className="header-dropdown-item logout"
                 >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-                    <polyline points="16 17 21 12 16 7"/>
-                    <line x1="21" y1="12" x2="9" y2="12"/>
+                  <svg className="header-dropdown-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                   </svg>
                   Đăng xuất
                 </button>
-              )}
+              </div>
             </div>
           )}
         </div>
@@ -170,5 +157,3 @@ export function Header({ title, children, menuItems = [], onLogout }: HeaderProp
     </header>
   );
 }
-
-

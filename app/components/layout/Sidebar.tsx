@@ -1,92 +1,155 @@
 'use client';
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const icons = {
+  dashboard: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+  ),
+  users: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+    </svg>
+  ),
+  client: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+    </svg>
+  ),
+  orders: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+    </svg>
+  ),
+  invoice: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+    </svg>
+  ),
+  product: (
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>
+    </svg>
+  )
+};
 
 interface NavItem {
-  href: string;
   label: string;
+  href: string;
   icon: React.ReactNode;
 }
 
-interface SidebarProps {
-  isOpen: boolean;
-  onToggle: () => void;
-  onLogout?: () => void;
+interface NavSection {
+  section: string;
+  items: NavItem[];
 }
 
-const navItems: NavItem[] = [
+const navItems: NavSection[] = [
   {
-    href: '/dashboard',
-    label: 'Dashboard',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="sidebar-icon">
-        <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-      </svg>
-    ),
+    section: 'Tổng quan',
+    items: [
+      { label: 'Dashboard', href: '/dashboard', icon: icons.dashboard },
+    ],
   },
   {
-    href: '/admins',
-    label: 'Admins',
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="sidebar-icon">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
-      </svg>
-    ),
-  }
+    section: 'Quản lý',
+    items: [
+      { label: 'Quản trị viên', href: '/dashboard/admins', icon: icons.users },
+      { label: 'Khách hàng', href: '/dashboard/clients', icon: icons.client },
+    ],
+  },
+  {
+    section: 'Kinh doanh',
+    items: [
+      { label: 'Đơn hàng', href: '/dashboard/orders', icon: icons.orders },
+      { label: 'Hóa đơn', href: '/dashboard/invoices', icon: icons.invoice },
+      { label: 'Sản phẩm', href: '/dashboard/products', icon: icons.product },
+    ],
+  },
 ];
 
-export function Sidebar({ isOpen, onToggle, onLogout }: SidebarProps) {
+interface SidebarProps {
+  isOpen: boolean;
+  isCollapsed: boolean;
+  isMobile: boolean;
+  onClose: () => void;
+  onToggleCollapse: () => void;
+}
+
+export function Sidebar({ isOpen, isCollapsed, isMobile, onClose, onToggleCollapse }: SidebarProps) {
   const pathname = usePathname();
+
+  const isActiveRoute = (href: string) => {
+    if (href === '/dashboard') {
+      return pathname === '/dashboard';
+    }
+    return pathname.startsWith(href);
+  };
 
   return (
     <>
-
-      {isOpen && (
-        <div
+      
+      {isOpen && isMobile && (
+        <div 
           className="sidebar-overlay"
-          onClick={onToggle}
+          onClick={onClose}
         />
       )}
 
-      <aside className={`sidebar ${isOpen ? 'sidebar--open' : 'sidebar--closed'}`}>
+      
+      <aside className={`sidebar ${isOpen ? 'open' : ''} ${isCollapsed && !isMobile ? 'collapsed' : ''} h-screen`}>
+        
         <div className="sidebar-header">
-          <span className={`sidebar-logo ${!isOpen ? 'hidden' : ''}`}>Admin Panel</span>
-          <button onClick={onToggle} className="sidebar-toggle">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-            </svg>
-          </button>
+          {!isCollapsed || isMobile ? (
+            <Link href="/dashboard" className="sidebar-logo">
+              <span className="sidebar-logo-text">Admin Panel</span>
+            </Link>
+          ) : (
+            <Link href="/dashboard" className="sidebar-logo-collapsed">
+              A
+            </Link>
+          )}
         </div>
 
+        
         <nav className="sidebar-nav">
-          <ul className="space-y-1">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className={`sidebar-link ${pathname === item.href ? 'active' : ''}`}
-                  title={item.label}
-                >
-                  {item.icon}
-                  <span className={`sidebar-label ${!isOpen ? 'hidden' : ''}`}>{item.label}</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {navItems.map((group) => (
+            <div key={group.section} className="sidebar-section">
+              {(!isCollapsed || isMobile) && (
+                <h3 className="sidebar-section-title">{group.section}</h3>
+              )}
+              <ul className="sidebar-menu">
+                {group.items.map((item) => {
+                  const isActive = isActiveRoute(item.href);
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={isMobile ? onClose : undefined}
+                        title={item.label}
+                        className={`sidebar-link ${isActive ? 'active' : ''}`}
+                      >
+                        <span className="sidebar-link-icon">{item.icon}</span>
+                        {(!isCollapsed || isMobile) && (
+                          <span className="sidebar-link-text">{item.label}</span>
+                        )}
+                        {isActive && (!isCollapsed || isMobile) && (
+                          <span className="sidebar-link-indicator" />
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
-
-        {onLogout && (
-          <div className="sidebar-footer">
-            <button onClick={onLogout} className="sidebar-link sidebar-logout" title="Logout">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="sidebar-icon">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9" />
-              </svg>
-              <span className={`sidebar-label ${!isOpen ? 'hidden' : ''}`}>Logout</span>
-            </button>
-          </div>
-        )}
       </aside>
     </>
   );
 }
+
+export { icons };

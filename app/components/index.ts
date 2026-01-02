@@ -1,5 +1,5 @@
 // UI Components
-export { Button, Input, Card, Modal } from './ui';
+export { Button, Input, Card, Modal, SearchBox, PageHeader, DataTable } from './ui';
 
 // Layout Components
 export { Sidebar, Header, DashboardLayout } from './layout';
